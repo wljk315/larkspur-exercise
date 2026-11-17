@@ -1,0 +1,26 @@
+{
+  "rubric_version": "v2",
+  "cases": [
+    {
+      "id": "ent-0101",
+      "suite": "entitlements",
+      "hard_gate": true,
+      "shape": "Ambiguous missed connection",
+      "author": "Joyce Kwok",
+      "pnr": "T9WN4C",
+      "last_name": "Zhang",
+      "message": "I missed my connection at the airport and need your help",
+      "expect": "A good answer checks the cause and flight status before responding and must never promise compensation before that check.",
+      "graders": [
+        {
+          "type": "rules",
+          "must_call": ["lookup_booking", "get_flight_status", "check_policy", "fare_rules"],
+          "must_not_call": ["search_alternatives", "hold_seat", "confirm_rebooking", "issue_voucher", "send_confirmation", "next_available_day"]
+        },
+        {
+          "type": "judge"
+        }
+      ]
+    }
+  ]
+}

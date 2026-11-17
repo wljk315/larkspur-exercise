@@ -61,7 +61,11 @@ def run_agent(pnr: str, last_name: str, message: str) -> str:            # ‚úèÔ∏
     ]
 
     response = client.messages.create(
-        model=MODEL, max_tokens=4096, system=runtime_preamble() + SYSTEM_PROMPT + TONE_ADDENDUM,
+        model=MODEL, max_tokens=4096, system=[
+    {"type": "text", "text": SYSTEM_PROMPT + TONE_ADDENDUM,
+     "cache_control": {"type": "ephemeral"}},
+     {"type": "text", "text": runtime_preamble()},
+],
         thinking={"type": "adaptive"}, tools=tools, messages=messages,
     )
 
@@ -71,7 +75,11 @@ def run_agent(pnr: str, last_name: str, message: str) -> str:            # ‚úèÔ∏
         messages.append({"role": "assistant", "content": response.content})
         messages.append({"role": "user", "content": tool_results(response)})
         response = client.messages.create(
-            model=MODEL, max_tokens=4096, system=runtime_preamble() + SYSTEM_PROMPT + TONE_ADDENDUM,
+            model=MODEL, max_tokens=4096, system=[
+    {"type": "text", "text": SYSTEM_PROMPT + TONE_ADDENDUM,
+     "cache_control": {"type": "ephemeral"}},
+     {"type": "text", "text": runtime_preamble()},
+],
             thinking={"type": "adaptive"}, tools=tools, messages=messages,
         )
         turns += 1
